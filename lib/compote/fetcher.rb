@@ -6,6 +6,10 @@ module Compote
     def fetch(uri)
       page = nil
       Rails.logger.tagged('fetcher') do
+        unless Rails.env.production?
+          cache = read_cache uri
+          return cache if cache
+        end
         Rails.logger.info "fetching #{uri.to_s}"
         page = open(uri.to_s).read
         local_path(uri).open('wb') do |f|
