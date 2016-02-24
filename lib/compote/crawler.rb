@@ -31,8 +31,18 @@ module Compote
 
     def crawl_isbns
       @isbns.each do |isbn|
+        resp = CrawledResponse.select(:updated_at).where(isbn: isbn).first
         uri = @amazon_api.build_lookup_items_by_isbn isbn
-        puts uri
+        if !resp
+          body = @fetcher.fetch uri
+          CrawledResponse.create isbn: isbn, body: body
+        elsif resp.expired?
+          body = @fetcher.fetch uri
+          resp.body = body
+          resp.update
+        else
+          Rails.logger.info "skipped #{isbn}: not expired (updated at #{resp.updated_at})"
+        end
       end
     end
 

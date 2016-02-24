@@ -3,10 +3,12 @@
 table_opts = { force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4' }
 
 create_table :crawled_responses, table_opts do |t|
-  t.integer   :isbn
+  t.integer   :isbn, limit: 8 # bigint
   t.text      :body, null: false, limit: 16777215 # mediumtext
   t.timestamps
 end
+
+add_index :crawled_responses, :isbn
 
 create_table :books, table_opts do |t|
   t.string    :asin, unique: true, null: false, limit: 32
