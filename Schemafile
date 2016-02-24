@@ -1,0 +1,23 @@
+# vim:ft=ruby
+
+table_opts = { force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4' }
+
+create_table :crawled_responses, table_opts do |t|
+  t.integer   :isbn
+  t.text      :body, null: false, limit: 16777215 # mediumtext
+  t.timestamps
+end
+
+create_table :books, table_opts do |t|
+  t.string    :asin, unique: true, null: false, limit: 32
+  t.string    :raw_title
+  t.string    :title
+  t.integer   :series_no
+  t.integer   :price
+  t.string    :publisher
+  t.string    :author
+  t.boolean   :is_adult, default: 0
+  t.date      :published_on
+  t.date      :released_on
+  t.timestamps
+end
