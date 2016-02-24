@@ -8,7 +8,7 @@ module Compote
     ENDPOINT = 'webservices.amazon.co.jp'
     REQUEST_URI = '/onca/xml'
 
-    def lookup_items_by_isbn(isbn)
+    def build_lookup_items_by_isbn(isbn)
       params = build_params(
         'Operation' => 'ItemLookup',
         'ItemId' => isbn,
@@ -18,7 +18,11 @@ module Compote
       query = params_to_query params
       signature = query_to_signature query
 
-      "https://#{ENDPOINT}#{REQUEST_URI}?#{query}&Signature=#{signature}"
+      URI::HTTPS.build(
+        host: ENDPOINT,
+        path: REQUEST_URI,
+        query: "#{query}&Signature=#{signature}",
+      )
     end
 
     private

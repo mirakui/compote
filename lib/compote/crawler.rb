@@ -31,7 +31,7 @@ module Compote
 
     def crawl_isbns
       @isbns.each do |isbn|
-        uri = @amazon_api.lookup_items_by_isbn isbn
+        uri = @amazon_api.build_lookup_items_by_isbn isbn
         puts uri
       end
     end
