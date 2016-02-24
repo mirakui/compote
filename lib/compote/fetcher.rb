@@ -29,7 +29,7 @@ module Compote
     def cache_dir
       @cache_dir ||= begin
                        dir = Rails.root.join 'tmp', 'fetcher'
-                       FileUtils.mkdir dir.to_s unless dir.exist?
+                       FileUtils.mkdir_p dir.to_s unless dir.exist?
                        dir
                      end
     end
