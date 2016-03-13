@@ -7,7 +7,6 @@ create_table :crawled_responses, table_opts do |t|
   t.text      :body, null: false, limit: 16777215 # mediumtext
   t.timestamps
 end
-
 add_index :crawled_responses, :isbn
 
 create_table :books, table_opts do |t|
@@ -15,11 +14,31 @@ create_table :books, table_opts do |t|
   t.string    :raw_title
   t.string    :title
   t.integer   :series_no
-  t.integer   :price
-  t.string    :publisher
-  t.string    :author
+  t.belongs_to :publisher, index: true
   t.boolean   :is_adult, default: 0
+  t.boolean   :is_ebook, default: 0
   t.date      :published_on
   t.date      :released_on
+  t.timestamps
+end
+
+create_table :authors, table_opts do |t|
+  t.string    :name
+  t.timestamps
+end
+
+create_table :authors_books, table_opts do |t|
+  t.belongs_to :book
+  t.belongs_to :author
+end
+add_index :authors_books, [:book_id, :author_id], unique: true
+
+create_table :serieses, table_opts do |t|
+  t.string     :title
+  t.timestamps
+end
+
+create_table :publishers, table_opts do |t|
+  t.string     :name
   t.timestamps
 end
