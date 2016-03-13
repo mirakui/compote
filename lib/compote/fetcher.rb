@@ -1,46 +1,54 @@
-require 'open-uri'
-require 'digest/sha2'
+require 'uri'
+require 'net/http'
 
 module Compote
   class Fetcher
+    class RetryLimit < StandardError; end
+
+    DEFAULT_INTERVAL = 1
+    RETRY_INTERVALS = [1, 2, 4, 8, 16, 32, 64]
+
+    def initialize
+      @last_fetched_at = {}
+    end
+
     def fetch(uri)
-      page = nil
-      Rails.logger.tagged('fetcher') do
-        unless Rails.env.production?
-          cache = read_cache uri
-          return cache if cache
+      uri = URI.parse uri unless uri.is_a?(URI)
+      sleep_host_interval uri.host
+
+      res = nil
+      i = 0
+      loop do
+        res = Net::HTTP.get_response uri
+        if res.code =~ /^5/
+          sleep_retry_interval i
+        else
+          break
         end
-        Rails.logger.info "fetching #{uri.to_s}"
-        page = open(uri.to_s).read
-        local_path(uri).open('wb') do |f|
-          f.write page
-        end
+        i += 1
       end
-      page
+      res.body
     end
 
-    def local_path(uri)
-      digest = Digest::SHA2.hexdigest uri.to_s
-      dir = cache_dir.join digest[0..2], digest[2..4]
-      FileUtils.mkdir_p dir.to_s unless dir.exist?
-      dir.join digest
-    end
-
-    def cache_dir
-      @cache_dir ||= begin
-                       dir = Rails.root.join 'tmp', 'fetcher'
-                       FileUtils.mkdir_p dir.to_s unless dir.exist?
-                       dir
-                     end
-    end
-
-    def read_cache(uri)
-      cache = local_path uri
-      if cache.exist?
-        cache.read
-      else
-        nil
+    def sleep_host_interval(host)
+      return unless @last_fetched_at.has_key? host
+      interval = DEFAULT_INTERVAL - (Time.now - @last_fetched_at[host])
+      if inverval > 0
+        Rails.logger.debug "waiting #{interval} secs for #{host}"
+        sleep interval
       end
+    end
+
+    def sleep_retry_interval(phase)
+      max = RETRY_INTERVALS.length
+
+      if phase >= max
+        raise RetryLimit, "retry limit exceeded: retried #{phase+1} times"
+      end
+
+      interval = RETRY_INTERVALS[phase]
+      Rails.logger.debug "waiting #{interval} secs for retrying (#{phase+1}/#{max})"
+      sleep interval
     end
   end
 end
