@@ -34,7 +34,7 @@ module AmazonParser
 
       result[:authors] = item.css('Author').map(&:text)
 
-      %w[ASIN Publisher Studio Title IsAdult PublicationDate ReleaseDate].each do |name|
+      %w[ASIN Publisher Studio Title IsAdultProduct PublicationDate ReleaseDate].each do |name|
         key = name.underscore.intern
         value = item.at_css(name).try(&:text)
         result[key] = value if value
