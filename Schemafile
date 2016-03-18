@@ -1,6 +1,6 @@
 # vim:ft=ruby
 
-table_opts = { force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4' }
+table_opts = { force: :cascade }
 
 create_table :crawled_responses, table_opts do |t|
   t.integer   :isbn, limit: 8 # bigint
@@ -10,17 +10,18 @@ end
 add_index :crawled_responses, :isbn
 
 create_table :books, table_opts do |t|
-  t.string    :asin, unique: true, null: false, limit: 32
+  t.string    :asin, null: false, limit: 32
   t.string    :raw_title
   t.string    :title
   t.integer   :series_no
   t.belongs_to :publisher, index: true
-  t.boolean   :is_adult, default: 0
-  t.boolean   :is_ebook, default: 0
+  t.boolean   :is_adult, default: false
+  t.boolean   :is_ebook, default: false
   t.date      :published_on
   t.date      :released_on
   t.timestamps
 end
+add_index :books, [:asin], unique: true
 
 create_table :authors, table_opts do |t|
   t.string    :name
