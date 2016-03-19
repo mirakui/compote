@@ -31,11 +31,11 @@ module Compote
 
     def crawl_isbns
       @isbns.each do |isbn|
-        resp = CrawledResponse.select(:updated_at).where(isbn: isbn).first
+        resp = Source.select(:updated_at).where(isbn: isbn).first
         uri = @amazon_api.build_lookup_items_by_isbn isbn
         if !resp
           body = @fetcher.fetch uri
-          CrawledResponse.create isbn: isbn, body: body
+          Source.create isbn: isbn, body: body
         elsif resp.expired?
           body = @fetcher.fetch uri
           resp.body = body

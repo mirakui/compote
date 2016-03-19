@@ -1,4 +1,6 @@
-class CrawledResponse < ActiveRecord::Base
+class Source < ActiveRecord::Base
+  has_many :books
+
   include AmazonParser
 
   LIFETIME_SEC = 1.day
