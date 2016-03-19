@@ -13,7 +13,7 @@ module Compote
     def start
       Rails.logger.tagged('crawler') do
         crawl_comic_list
-        crawl_isbns
+        #crawl_isbns
       end
     end
 
@@ -23,9 +23,12 @@ module Compote
       month ||= now.month
       ym = Time.new(year, month).strftime('%y%m')
       uri = "http://www.bookservice.jp/layout/bs/common/html/schedule/#{ym}c.html"
+      Rails.logger.info "fetching #{uri}"
       page = @fetcher.fetch uri
       isbns = Parser.extract_isbns_from_comic_list_html page
-      enqueue_isbns isbns
+      Rails.logger.info "#{isbns.length} ISBNs"
+      #enqueue_isbns isbns
+      create_sources_by_isbns isbns, ym
     end
 
     def crawl_isbns
@@ -43,6 +46,11 @@ module Compote
           Rails.logger.info "skipped #{isbn}: not expired (updated at #{resp.updated_at})"
         end
       end
+    end
+
+    def create_sources_by_isbns(isbns, ym)
+      sources = isbns.map {|isbn| Source.new isbn: isbn, ym: ym }
+      Source.import sources, on_duplicate_key_update: { ym: 'ym' }
     end
 
     def enqueue_isbns(isbns)

@@ -7,9 +7,9 @@ module Compote
     end
 
     TITLE_PATTERNS = [
-      /\A(?<title>.*?)\s*\((?<num>\d+)\)/,
-      /\A(?<title>.*?)\s*(?<num>\d+)巻?/,
-      /\A(?<title>.*?)\s*[:\(]/,
+      /\A(?<title>.+?)\s*\((?<num>\d+)\)/,
+      /\A(?<title>.+?)\s*(?<num>\d+)巻?/,
+      /\A(?<title>.+?)\s*[:\(]/,
     ]
     def self.parse_series_from_book_title(title)
       title = Normalizer.normalize_book_title title

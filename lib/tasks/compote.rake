@@ -10,6 +10,16 @@ namespace :compote do
       crawler = Compote::Crawler.new
       crawler.start
     end
+
+    task start_old_comic_list: :environment do
+      crawler = Compote::Crawler.new
+      t = Time.new 2012, 2
+      t_end = Time.new 2016, 4, 30
+      while t <= t_end
+        crawler.crawl_comic_list t.year, t.month
+        t = 1.month.since t
+      end
+    end
   end
 
   namespace :books do
