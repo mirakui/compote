@@ -1,3 +1,5 @@
+require 'compote/normalizer'
+
 module Compote
   class Importer
     BATCH_SIZE = 100
@@ -41,11 +43,11 @@ module Compote
         end
       end
     rescue => e
-        binding.pry
       Rails.logger.error "import failed: { #{type}: #{item.inspect} } exception: #{e} (#{e.class})"
     end
 
     def find_publisher_by_name(name)
+      name = Compote::Normalizer.normalize_author_name name
       @publishers ||= Hash[Publisher.all.to_a.map {|x| [x.name, x] }]
       @publishers[name] ||= Publisher.new(name: name)
     end
