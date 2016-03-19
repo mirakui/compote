@@ -29,9 +29,10 @@ module Compote
 
     def import_book_item(type, item, source, cached_books)
       book = cached_books[item[:asin]] || Book.new(asin: item[:asin])
+      book.isbn = source.isbn
       book.released_on = item[:release_date]
       book.published_on = item[:publication_date]
-      book.raw_title = item[:title]
+      book.title = item[:title]
       book.is_ebook = type == :ebook
       book.is_adult = item[:is_adult_product].to_i == 1
       book.publisher = find_publisher_by_name item[:publisher]
@@ -47,7 +48,7 @@ module Compote
     end
 
     def find_publisher_by_name(name)
-      name = Compote::Normalizer.normalize_author_name name
+      name = Normalizer.normalize_publisher_name name
       @publishers ||= Hash[Publisher.all.to_a.map {|x| [x.name, x] }]
       @publishers[name] ||= Publisher.new(name: name)
     end

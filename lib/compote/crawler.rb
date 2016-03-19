@@ -6,7 +6,6 @@ module Compote
   class Crawler
     def initialize
       @fetcher = Fetcher.new
-      @parser = Parser.new
       @amazon_api = AmazonApi.new
       @isbns = []
     end
@@ -25,7 +24,7 @@ module Compote
       ym = Time.new(year, month).strftime('%y%m')
       uri = "http://www.bookservice.jp/layout/bs/common/html/schedule/#{ym}c.html"
       page = @fetcher.fetch uri
-      isbns = @parser.extract_isbns_from_comic_list_html page
+      isbns = Parser.extract_isbns_from_comic_list_html page
       enqueue_isbns isbns
     end
 

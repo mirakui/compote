@@ -7,6 +7,6 @@ class Publisher < ActiveRecord::Base
 
   protected
   def normalize_name
-    self.name = Compote::Normalizer.normalize_author_name name
+    self.name = Compote::Normalizer.normalize_publisher_name name
   end
 end

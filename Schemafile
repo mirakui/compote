@@ -3,15 +3,16 @@
 table_opts = { force: :cascade }
 
 create_table :sources, table_opts do |t|
-  t.integer   :isbn, limit: 8 # bigint
+  t.string    :isbn, null: false, limit: 32
   t.text      :body, null: false, limit: 16777215 # mediumtext
   t.timestamps
 end
 add_index :sources, :isbn
 
 create_table :books, table_opts do |t|
+  t.string     :isbn, null: false, limit: 32
   t.string     :asin, null: false, limit: 32
-  t.string     :raw_title
+  t.string     :title
   t.belongs_to :serieses, index: true
   t.integer    :series_order
   t.string     :series_order_label
@@ -24,6 +25,7 @@ create_table :books, table_opts do |t|
   t.date       :released_on
   t.timestamps
 end
+add_index :books, [:isbn]
 add_index :books, [:asin], unique: true
 add_index :books, [:published_on]
 add_index :books, [:released_on]

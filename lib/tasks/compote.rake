@@ -1,5 +1,6 @@
 require 'compote/crawler'
 require 'compote/importer'
+require 'compote/exporter'
 require 'dotenv/tasks'
 
 namespace :compote do
@@ -16,6 +17,13 @@ namespace :compote do
     task import: :environment do
       importer = Compote::Importer.new
       importer.start
+    end
+
+    desc 'export book titles as TSV'
+    task export: :environment do
+      raise 'please specify output filename as ENV["FILE"]' unless ENV['FILE']
+      exporter = Compote::Exporter.new ENV['FILE']
+      exporter.start
     end
   end
 end
