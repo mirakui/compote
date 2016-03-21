@@ -36,6 +36,7 @@ module Compote
       count = sources.count
       sources.each.with_index do |source, i|
         Rails.logger.info "fetching #{source.isbn} (#{i+1}/#{count})"
+        uri = @amazon_api.build_lookup_items_by_isbn isbn
         source.body = @fetcher.fetch uri
         source.save
       end
