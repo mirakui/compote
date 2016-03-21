@@ -10,12 +10,12 @@ module Compote
       @isbns = []
     end
 
-    def start
-      Rails.logger.tagged('crawler') do
-        crawl_comic_list
-        #crawl_isbns
-      end
-    end
+    #def start
+    #  Rails.logger.tagged('crawler') do
+    #    crawl_comic_list
+    #    #crawl_isbns
+    #  end
+    #end
 
     def crawl_comic_list(year=nil, month=nil)
       now = Time.now
@@ -32,19 +32,12 @@ module Compote
     end
 
     def crawl_isbns
-      @isbns.each do |isbn|
-        resp = Source.select(:updated_at).where(isbn: isbn).first
-        uri = @amazon_api.build_lookup_items_by_isbn isbn
-        if !resp
-          body = @fetcher.fetch uri
-          Source.create isbn: isbn, body: body
-        elsif resp.expired?
-          body = @fetcher.fetch uri
-          resp.body = body
-          resp.update
-        else
-          Rails.logger.info "skipped #{isbn}: not expired (updated at #{resp.updated_at})"
-        end
+      sources = Source.where('body IS NULL')
+      count = sources.count
+      sources.each.with_index do |source, i|
+        Rails.logger.info "fetching #{source.isbn} (#{i+1}/#{count})"
+        source.body = @fetcher.fetch uri
+        source.save
       end
     end
 

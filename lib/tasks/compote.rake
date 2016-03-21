@@ -11,7 +11,12 @@ namespace :compote do
       crawler.start
     end
 
-    task start_old_comic_list: :environment do
+    task isbns: :environment do
+      crawler = Compote::Crawler.new
+      crawler.crawl_isbns
+    end
+
+    task old_comic_list: :environment do
       crawler = Compote::Crawler.new
       t = Time.new 2012, 2
       t_end = Time.new 2016, 4, 30
