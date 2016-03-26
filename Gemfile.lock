@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/winebarrel/ridgepole.git
+  revision: d4c0537b708da3e8cae09eda25af7ec7fec27514
+  branch: v0.6.5
+  specs:
+    ridgepole (0.6.4)
+      activerecord (>= 4.2, < 6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -32,6 +40,10 @@ GEM
       arel (~> 6.0)
     activerecord-import (0.12.0)
       activerecord (>= 3.0)
+    activerecord-mysql-awesome (0.0.8)
+      activerecord (~> 4.0)
+      activesupport (~> 4.0)
+      mysql2 (>= 0.3.18)
     activesupport (4.2.6)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
@@ -124,8 +136,6 @@ GEM
     rake (11.1.0)
     rdoc (4.2.2)
       json (~> 1.4)
-    ridgepole (0.6.4)
-      activerecord (~> 4.2.1)
     sass (3.4.21)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
@@ -166,6 +176,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  activerecord-mysql-awesome
   byebug
   coffee-rails (~> 4.1.0)
   dotenv-rails
@@ -176,7 +187,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   rails (= 4.2.6)
-  ridgepole
+  ridgepole!
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring

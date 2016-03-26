@@ -1,12 +1,21 @@
+def ridgepole_cmd(*opts)
+  opts = %W[
+    -a
+    -c config/database.yml
+    --enable-mysql-awesome
+    -E #{Rails.env}
+  ].concat opts
+  "bundle exec ridgepole #{opts.flatten.join(' ')}"
+end
+
 namespace :ridgepole do
   desc 'apply ridgepole'
   task apply: :environment do
-    sh "bundle exec ridgepole -a -c config/database.yml -E #{Rails.env}"
+    sh ridgepole_cmd
   end
 
   desc 'dry-run ridgepole'
   task 'dry-run' => :environment do
-    sh "bundle exec ridgepole -a -c config/database.yml -E #{Rails.env} --dry-run"
+    sh ridgepole_cmd('--dry-run')
   end
-
 end

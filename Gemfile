@@ -48,5 +48,6 @@ end
 gem 'dotenv-rails'
 gem 'faraday'
 gem 'mysql2'
-gem 'ridgepole'
+gem 'ridgepole', github: 'winebarrel/ridgepole', branch: 'v0.6.5'
+gem 'activerecord-mysql-awesome'
 gem 'activerecord-import'

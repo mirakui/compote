@@ -1,6 +1,6 @@
 # vim:ft=ruby
 
-table_opts = { force: :cascade }
+table_opts = { force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4' }
 
 create_table :sources, table_opts do |t|
   t.string    :isbn, null: false, limit: 32
@@ -42,3 +42,12 @@ create_table :publishers, table_opts do |t|
   t.timestamps
 end
 add_index :publishers, [:name], unique: true
+
+create_table :users, table_opts do |t|
+  t.string     :email, null: false, collation: 'utf8mb4_bin'
+  t.string     :password_hash, null: false
+  t.string     :password_salt, null: false
+  t.string     :role, limit: 32
+  t.timestamps
+end
+add_index :users, [:email], unique: true
