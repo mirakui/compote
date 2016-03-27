@@ -1,0 +1,26 @@
+doctype html
+html
+  head
+    title Compote
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  body role="document"
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      .container
+        .navbar-header
+          .navbar-brand 新刊通知
+        #navbar.navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li.active
+              a href="#" Home
+            li
+              a href="#about" About
+            li
+              a href="#contact" Contact
+
+    .container.theme-showcase role="body"
+      .jumbotron
+        h1 theme example
+        == yield
