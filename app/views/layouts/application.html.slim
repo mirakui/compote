@@ -10,17 +10,13 @@ html
     nav.navbar.navbar-inverse.navbar-fixed-top
       .container
         .navbar-header
-          .navbar-brand 新刊通知
+          .navbar-brand Compote
         #navbar.navbar-collapse.collapse
-          ul.nav.navbar-nav
-            li.active
-              a href="#" Home
+          ul.nav.navbar-nav.navbar-right
             li
-              a href="#about" About
+              = link_to 'アカウント登録', signup_path
             li
-              a href="#contact" Contact
+              = link_to 'ログイン', '#'
 
-    .container.theme-showcase role="body"
-      .jumbotron
-        h1 theme example
-        == yield
+    .container role="body"
+      == yield

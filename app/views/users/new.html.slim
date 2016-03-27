@@ -1,5 +1,23 @@
-h1 New user
+h1 アカウント登録
 
-== render 'form'
+= form_for @user do |f|
+  - if @user.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+      ul
+        - @user.errors.full_messages.each do |message|
+          li = message
+  p
+    = f.label :email, 'メールアドレス'
+    .input-group
+      = f.text_field :email, class: 'form-control', placeholder: 'hello@example.com'
+  p
+    = f.label :password, 'パスワード'
+    .input-group
+      = f.password_field :password, class: 'form-control'
+  p
+    = f.label :password_confirmation, 'パスワードをもう一度入力'
+    .input-group
+      = f.password_field :password_confirmation, class: 'form-control'
 
-= link_to 'Back', users_path
+  .actions = f.submit '登録'
