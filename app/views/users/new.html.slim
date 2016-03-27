@@ -13,6 +13,9 @@
       p
         = f.label :email, 'メールアドレス'
         = f.text_field :email, class: 'form-control', placeholder: 'hello@example.com'
+        - if @user.errors[:email]
+          .alert.alert-danger role="alert"
+            == @user.errors[:email].map {|s| "Email #{s}" }.join('<br>')
         br
         = f.label :password, 'パスワード'
         = f.password_field :password, class: 'form-control'
