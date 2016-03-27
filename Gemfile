@@ -11,6 +11,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+gem 'slim-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -22,7 +23,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -51,4 +52,4 @@ gem 'mysql2'
 gem 'ridgepole', github: 'winebarrel/ridgepole', branch: 'v0.6.5'
 gem 'activerecord-mysql-awesome'
 gem 'activerecord-import'
-gem 'bcrypt', '~> 3.1.7'
+
