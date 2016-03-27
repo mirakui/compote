@@ -1,23 +1,23 @@
-h1 アカウント登録
+.page-header
+  h1 アカウント登録
 
-= form_for @user do |f|
-  - if @user.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
-      ul
-        - @user.errors.full_messages.each do |message|
-          li = message
-  p
-    = f.label :email, 'メールアドレス'
-    .input-group
-      = f.text_field :email, class: 'form-control', placeholder: 'hello@example.com'
-  p
-    = f.label :password, 'パスワード'
-    .input-group
-      = f.password_field :password, class: 'form-control'
-  p
-    = f.label :password_confirmation, 'パスワードをもう一度入力'
-    .input-group
-      = f.password_field :password_confirmation, class: 'form-control'
-
-  .actions = f.submit '登録'
+.row
+  .col-xs-12.col-md-6
+    = form_for @user do |f|
+      - if @user.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+          ul
+            - @user.errors.full_messages.each do |message|
+              li = message
+      p
+        = f.label :email, 'メールアドレス'
+        = f.text_field :email, class: 'form-control', placeholder: 'hello@example.com'
+        br
+        = f.label :password, 'パスワード'
+        = f.password_field :password, class: 'form-control'
+        br
+        = f.label :password_confirmation, 'パスワードをもう一度入力'
+        = f.password_field :password_confirmation, class: 'form-control'
+        br
+      .actions = f.submit '登録', class: 'btn btn-default'
