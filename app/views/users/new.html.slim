@@ -5,20 +5,19 @@
   .col-xs-12.col-md-6
     = form_for @user do |f|
       - if @user.errors.any?
-        #error_explanation
-          h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+        #error_explanation.alert.alert-danger role="alert"
+          h2 = "入力エラーがあります"
           ul
-            - @user.errors.full_messages.each do |message|
-              li = message
+            - @user.errors.messages.each do |field, messages|
+              - messages.each do |message|
+                li = message
       p
         = f.label :email, 'メールアドレス'
         = f.text_field :email, class: 'form-control', placeholder: 'hello@example.com'
-        - if @user.errors[:email]
-          .alert.alert-danger role="alert"
-            == @user.errors[:email].map {|s| "Email #{s}" }.join('<br>')
         br
         = f.label :password, 'パスワード'
-        = f.password_field :password, class: 'form-control'
+        = f.password_field :password, class: 'form-control',
+          placeholder: "6〜#{ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED}文字"
         br
         = f.label :password_confirmation, 'パスワードをもう一度入力'
         = f.password_field :password_confirmation, class: 'form-control'

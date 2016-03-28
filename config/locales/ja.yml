@@ -1,0 +1,14 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        email: "メールアドレス"
+        password: "パスワード"
+    errors:
+      messages:
+        invalid: "%{attribute}を正しく入力してください"
+        blank: "%{attribute}を入力してください"
+        too_long: "%{attribute}が長すぎます。%{count}文字以内で入力してください"
+        too_short: "%{attribute}が短すぎます。%{count}文字以上で入力してください"
+        confirmation: "同じ%{attribute}を入力してください"
+        taken: "%{attribute} \"%{value}\" はすでに登録されています"
