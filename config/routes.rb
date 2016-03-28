@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   root 'top#index'
 
-  get 'signup' => 'users#new', as: :signup
-  post 'signup' => 'users#create', as: :post_signup
+  get 'signup' => 'registration#new', as: :signup
+  post 'signup' => 'registration#create', as: :post_signup
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
