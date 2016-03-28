@@ -3,7 +3,7 @@
 
 .row
   .col-xs-12.col-md-6
-    = form_for @user do |f|
+    = form_for @user, url: post_signup_path do |f|
       - if @user.errors.any?
         #error_explanation.alert.alert-danger role="alert"
           h2 = "入力エラーがあります"
