@@ -47,6 +47,7 @@ create_table :users, table_opts do |t|
   t.string     :email, null: false, collation: 'utf8mb4_bin'
   t.string     :password_digest, null: false
   t.string     :role, limit: 32
+  t.datetime   :activated_at
   t.timestamps
 end
 add_index :users, [:email], unique: true

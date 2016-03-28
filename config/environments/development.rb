@@ -38,4 +38,21 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.cache_store = :redis_store, { host: 'localhost',
+                                       port: 6379,
+                                       db: 0,
+                                       namespace: 'cache',
+                                       expires_in: 1.day }
+
+  config.session_store :redis_session_store, {
+    key: '_compote_session',
+    redis: {
+      db: 1,
+      expire_after: 120.minutes,
+      key_prefix: 'session:',
+      host: 'localhost',
+      port: 6379,
+    }
+  }
 end

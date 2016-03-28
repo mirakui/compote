@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   get 'signup' => 'registration#new', as: :signup
   post 'signup' => 'registration#create', as: :post_signup
+  get 'registration/activate' => 'registration#activate', as: :registration_activate
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
