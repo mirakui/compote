@@ -38,6 +38,7 @@ group :development, :test do
   gem 'byebug'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rspec-rails'
 end
 
 group :development do
