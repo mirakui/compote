@@ -11,7 +11,9 @@ class RegistrationToken
 
   def self.create(user_id:)
     value = Digest::SHA2.hexdigest rand.to_s
-    new value: value, user_id: user_id
+    token = new value: value, user_id: user_id
+    token.save!
+    token
   end
 
   def cache_key
@@ -37,12 +39,11 @@ class RegistrationToken
 
   def self.find(value)
     user_id = Rails.cache.read cache_key(value)
-    token = new value: value, user_id: user_id
-    if token
-      token.validate!
-      token
-    else
+    if user_id.blank?
       raise NotFound, "token #{value.inspect} not found"
     end
+    token = new value: value, user_id: user_id
+    token.validate!
+    token
   end
 end

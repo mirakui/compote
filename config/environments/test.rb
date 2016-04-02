@@ -40,5 +40,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  config.cache_store = :memory_store
+
   config.session_store :cookie_store, key: '_compote_session'
 end
