@@ -22,13 +22,14 @@ class RegistrationController < ApplicationController
     user_id = Rails.cache.read key
     if user_id
       @user = User.find_by_id user_id
-      if @user.active?
-        # FIXME
-        redirect_to root_path, notice: 'user has been already activated'
-      else
-        @user.activate!
+      if @user.activating?
+        @user.active!
+        Rails.cache.delete key
         # FIXME
         redirect_to root_path, notice: 'activated'
+      else
+        Rails.cache.delete key
+        render plain: 'invalid activation token', status: 404
       end
     else
       render plain: 'your activation token has been expired', status: 404
