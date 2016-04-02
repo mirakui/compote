@@ -9,44 +9,41 @@ class RegistrationController < ApplicationController
     )
     @user = User.new(user_params)
 
-    if @user.save
-      send_activation_email @user
-      redirect_to root_path, notice: 'User was successfully created.'
-    else
-      render :new
+    User.transaction do
+      if @user.save
+        send_activation_email @user
+        redirect_to root_path, notice: 'User was successfully created.'
+      else
+        render :new
+      end
     end
   end
 
   def activate
-    key = token_key params[:token]
-    user_id = Rails.cache.read key
-    if user_id
-      @user = User.find_by_id user_id
-      if @user.activating?
-        @user.active!
-        Rails.cache.delete key
-        # FIXME
-        redirect_to root_path, notice: 'activated'
-      else
-        Rails.cache.delete key
-        render plain: 'invalid activation token', status: 404
-      end
+    token = RegistrationToken.find params[:token]
+    token.validate!
+    @user = User.find_by_id token.user_id
+    if @user.activating?
+      @user.active!
+      token.delete
+      # FIXME
+      redirect_to root_path, notice: 'activated'
     else
-      render plain: 'your activation token has been expired', status: 404
-      # TODO error
+      token.delete
+      render plain: 'invalid activation token', status: 404
     end
+  rescue RegistrationToken::InvalidToken
+    render plain: 'your activation token is invalid', status: 401
+  rescue RegistrationToken::NotFound
+    render plain: 'your activation token has been expired', status: 401
   end
 
   private
   def send_activation_email(user)
-    token = Digest::SHA2.hexdigest rand.to_s
-    Rails.cache.write token_key(token), user.id, expires_in: 1.day
-    url = registration_activate_url token: token
+    token = RegistrationToken.create user_id: user.id
+    token.save!
+    url = registration_activate_url token: token.value
     logger.info "activation: #{url}"
     # TODO send mail
-  end
-
-  def token_key(token)
-    "registration/token/#{token}"
   end
 end
