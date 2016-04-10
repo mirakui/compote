@@ -14,10 +14,12 @@ html
             = link_to 'Compote', root_path
         #navbar.navbar-collapse.collapse
           ul.nav.navbar-nav.navbar-right
-            li
-              = link_to 'アカウント登録', signup_path
-            li
-              = link_to 'ログイン', '#'
+            - if current_user
+              li = link_to current_user.email, '#'
+              li = link_to 'ログアウト', logout_path, method: :post
+            - else
+              li = link_to 'アカウント登録', signup_path
+              li = link_to 'ログイン', signin_path
 
     .container role="body"
       == yield

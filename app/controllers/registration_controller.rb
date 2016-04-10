@@ -12,6 +12,7 @@ class RegistrationController < ApplicationController
     User.transaction do
       if @user.save
         send_activation_email @user
+        session[:user_id] = @user.id
         redirect_to root_path, notice: "#{@user.email} にメールを送信しました。メールに書かれたリンクをクリックしてアカウント登録を完了してください"
       else
         render :new

@@ -1,0 +1,18 @@
+.page-header
+  h1 ログイン
+
+= form_tag post_signin_path do |f|
+  - if flash[:alert]
+    #error_explanation.alert.alert-danger role="alert"
+      p = flash[:alert]
+  .row
+    .col-xs-12.col-md-3
+      p
+        = label_tag :email, 'メールアドレス'
+        = text_field_tag :email, '', class: 'form-control'
+        br
+        = label_tag :password, 'パスワード'
+        = password_field_tag :password, '', class: 'form-control'
+        br
+      .actions = submit_tag 'ログイン', class: 'btn btn-default'
+
