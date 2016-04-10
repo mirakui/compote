@@ -12,7 +12,7 @@ class RegistrationController < ApplicationController
     User.transaction do
       if @user.save
         send_activation_email @user
-        redirect_to root_path, notice: 'User was successfully created.'
+        redirect_to root_path, notice: "#{@user.email} にメールを送信しました。メールに書かれたリンクをクリックしてアカウント登録を完了してください"
       else
         render :new
       end
@@ -27,7 +27,7 @@ class RegistrationController < ApplicationController
       @user.active!
       token.delete
       # FIXME
-      redirect_to root_path, notice: 'activated'
+      redirect_to root_path, notice: "メールアドレス #{@user.email} の認証が完了しました"
     else
       token.delete
       render plain: 'invalid activation token', status: 404
