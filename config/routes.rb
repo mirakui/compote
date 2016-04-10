@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   post 'signup' => 'registration#create', as: :post_signup
   get 'registration/activate' => 'registration#activate', as: :registration_activate
 
-  get 'signin' => 'session#new', as: :signin
-  post 'signin' => 'session#create', as: :post_signin
+  get 'login' => 'session#new', as: :login
+  post 'login' => 'session#create', as: :post_login
   post 'logout' => 'session#destroy', as: :logout
 
   # The priority is based upon order of creation: first created -> highest priority.
