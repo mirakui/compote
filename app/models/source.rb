@@ -1,12 +1,17 @@
+require 'compote/amazon_api'
+require 'compote/fetcher'
+
 class Source < ActiveRecord::Base
   has_many :books
 
   include AmazonParser
 
-  LIFETIME_SEC = 1.day
-
-  def expired?
-    return false if Rails.env.development?
-    Time.now - self.updated_at > LIFETIME_SEC
+  def fetch
+    api = Compote::AmazonApi.new
+    fetcher = Compote::Fetcher.new
+    uri = api.build_lookup_items_by_isbn self.isbn
+    self.body = fetcher.fetch uri
+    self.crawled_at = Time.now
+    self
   end
 end

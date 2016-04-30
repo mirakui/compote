@@ -33,6 +33,7 @@ module AmazonParser
       result = {}
 
       result[:authors] = item.css('Author').map(&:text)
+      result[:large_image_url] = item.at_css('LargeImage URL').try(&:text)
 
       %w[ASIN Publisher Studio Title IsAdultProduct PublicationDate ReleaseDate].each do |name|
         key = name.underscore.intern

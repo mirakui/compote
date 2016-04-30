@@ -31,13 +31,14 @@ module Compote
     def import_book_item(type, item, source, cached_books)
       book = cached_books[item[:asin]] || Book.new(asin: item[:asin])
       book.isbn = source.isbn
-      book.released_on = item[:release_date]
-      book.published_on = item[:publication_date]
+      book.released_on = Normalizer.normalize_date item[:release_date]
+      book.published_on = Normalizer.normalize_date item[:publication_date]
       book.title = Normalizer.normalize_book_title item[:title]
       book.is_ebook = type == :ebook
       book.is_adult = item[:is_adult_product].to_i == 1
       book.publisher = find_publisher_by_name item[:publisher]
       book.authors = item[:authors].join("\t")
+      book.large_image_url = item[:large_image_url]
       book.source = source
       if book.changed?
         book.save

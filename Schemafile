@@ -23,6 +23,7 @@ create_table :books, table_opts do |t|
   t.boolean    :is_ebook, default: false
   t.belongs_to :source, index: true
   t.string     :authors
+  t.string     :large_image_url
   t.date       :published_on
   t.date       :released_on
   t.timestamps
