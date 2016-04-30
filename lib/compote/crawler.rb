@@ -51,6 +51,7 @@ module Compote
         Rails.logger.info "fetching #{source.isbn} (#{i+1}/#{count})"
         uri = @amazon_api.build_lookup_items_by_isbn source.isbn
         source.body = @fetcher.fetch uri
+        source.crawled_at = Time.now
         source.save
       end
     end

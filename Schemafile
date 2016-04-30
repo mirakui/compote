@@ -6,6 +6,7 @@ create_table :sources, table_opts do |t|
   t.string    :isbn, null: false, limit: 32
   t.text      :body, limit: 16777215 # mediumtext
   t.string    :ym, limit: 10
+  t.datetime  :crawled_at
   t.timestamps
 end
 add_index :sources, [:isbn], unique: true
