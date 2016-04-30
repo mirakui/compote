@@ -10,12 +10,23 @@ module Compote
       @isbns = []
     end
 
-    #def start
-    #  Rails.logger.tagged('crawler') do
-    #    crawl_comic_list
-    #    #crawl_isbns
-    #  end
-    #end
+    def start(month_ago=0)
+      t_start = month_ago.to_i.month.ago
+
+      Rails.logger.info "crawling comic list since #{t_start}"
+
+      t = t_start
+      isbns_len = nil
+      loop do
+        isbns_len = crawl_comic_list t.year, t.month
+        t = 1.month.since t
+        break if isbns_len == 0
+      end
+
+      Rails.logger.info "crawling ISBNs since #{t_start}"
+
+      crawl_isbns t_start
+    end
 
     def crawl_comic_list(year=nil, month=nil)
       now = Time.now
@@ -27,12 +38,16 @@ module Compote
       page = @fetcher.fetch uri
       isbns = Parser.extract_isbns_from_comic_list_html page
       Rails.logger.info "#{isbns.length} ISBNs"
-      #enqueue_isbns isbns
       create_sources_by_isbns isbns, ym
+      return isbns.length
     end
 
-    def crawl_isbns
-      sources = Source.where('body IS NULL')
+    def crawl_isbns(since=nil)
+      sources = if since
+                  Source.where('created_at >= ?', since)
+                else
+                  Source.where('body IS NULL')
+                end
       count = sources.count
       sources.each.with_index do |source, i|
         Rails.logger.info "fetching #{source.isbn} (#{i+1}/#{count})"
@@ -45,15 +60,6 @@ module Compote
     def create_sources_by_isbns(isbns, ym)
       sources = isbns.map {|isbn| Source.new isbn: isbn, ym: ym }
       Source.import sources, on_duplicate_key_update: { ym: 'ym' }
-    end
-
-    def enqueue_isbns(isbns)
-      isbns.each do |isbn|
-        @isbns << isbn
-        # TODO
-        puts "queued #{isbn}"
-      end
-      Rails.logger.info "enqueued #{isbns.length} ISBNs"
     end
   end
 end

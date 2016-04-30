@@ -6,9 +6,9 @@ require 'dotenv/tasks'
 namespace :compote do
   namespace :crawler do
     desc 'start crawler'
-    task start: :environment do
+    task :start, [:month_ago] => :environment do |task, args|
       crawler = Compote::Crawler.new
-      crawler.start
+      crawler.start args[:month_ago]
     end
 
     task isbns: :environment do
