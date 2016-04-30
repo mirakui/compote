@@ -11,7 +11,7 @@ module Compote
     end
 
     def start(month_ago=0)
-      t_start = month_ago.to_i.month.ago
+      t_start = month_ago.to_i.month.ago.beginning_of_month
 
       Rails.logger.info "crawling comic list since #{t_start}"
 
@@ -25,14 +25,11 @@ module Compote
 
       Rails.logger.info "crawling ISBNs since #{t_start}"
 
-      crawl_isbns t_start
+      crawl_isbns t_start.year, t_start.month
     end
 
     def crawl_comic_list(year=nil, month=nil)
-      now = Time.now
-      year ||= now.year
-      month ||= now.month
-      ym = Time.new(year, month).strftime('%y%m')
+      ym = get_ym year, month
       uri = "http://www.bookservice.jp/layout/bs/common/html/schedule/#{ym}c.html"
       Rails.logger.info "fetching #{uri}"
       page = @fetcher.fetch uri
@@ -42,9 +39,10 @@ module Compote
       return isbns.length
     end
 
-    def crawl_isbns(since=nil)
-      sources = if since
-                  Source.where('created_at >= ?', since)
+    def crawl_isbns(year=nil, month=nil)
+      sources = if year && month
+                  ym_since = get_ym year, month
+                  Source.where('ym >= ?', ym_since)
                 else
                   Source.where('body IS NULL')
                 end
@@ -55,6 +53,11 @@ module Compote
         source.body = @fetcher.fetch uri
         source.save
       end
+    end
+
+    def get_ym(year=nil, month=nil)
+      t = Time.now
+      Time.new(year || t.year, month || t.month).strftime('%y%m')
     end
 
     def create_sources_by_isbns(isbns, ym)
