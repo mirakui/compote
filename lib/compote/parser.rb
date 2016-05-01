@@ -2,10 +2,6 @@ require 'compote/normalizer'
 
 module Compote
   class Parser
-    def self.extract_isbns_from_comic_list_html(page)
-      page.scan(/>\s*(9784\d+)\s*</).map {|m| m[0] }
-    end
-
     TITLE_PATTERNS = [
       /\A(?<title>.+?)\s*\((?<num>\d+)\)/,
       /\A(?<title>.+?)\s*(?<num>\d+)巻?/,

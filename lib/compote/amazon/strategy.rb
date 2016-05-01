@@ -30,7 +30,7 @@ module Compote
 
         def execute(args={})
           body = request args
-          parse_body_xml body
+          parse_as_xml body
         end
 
         def request(args={})

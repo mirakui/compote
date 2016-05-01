@@ -13,7 +13,6 @@ module Compote
         task = Task::UpdateSourceBodies.new
         updated_source_ids = task.start month_ago
 
-        updated_source_ids = Source.order('crawled_at DESC').limit(2).pluck(:id)
         task = Task::UpdateBooksFromSources.new
         task.start updated_source_ids
       end

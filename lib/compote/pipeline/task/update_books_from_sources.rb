@@ -1,4 +1,5 @@
 require 'compote/normalizer'
+require 'compote/amazon/strategy/lookup_items_by_isbn'
 
 module Compote
   module Pipeline
@@ -8,6 +9,7 @@ module Compote
 
         def initialize
           @publishers = nil
+          @strategy = Amazon::Strategy::LookupItemsByIsbn.new
         end
 
         def start(source_ids=[])
@@ -19,7 +21,7 @@ module Compote
 
         def import_books(sources)
           sources.find_in_batches(batch_size: BATCH_SIZE) do |batch_sources|
-            items = batch_sources.map(&:parse_body_xml)
+            items = batch_sources.map {|s| @strategy.parse_as_xml s.body }
             asins = items.map {|v| v.values.map {|x| x[:asin] } }.flatten.compact
             cached_books = Hash[Book.where(asin: asins).to_a.map {|b| [b.asin, b] }]
             batch_sources.each_with_index do |source, i|
