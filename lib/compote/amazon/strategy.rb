@@ -11,7 +11,7 @@ module Compote
         ENDPOINT = 'webservices.amazon.co.jp'
         REQUEST_URI = '/onca/xml'
 
-        def initialize(fetcher:)
+        def initialize(fetcher:nil)
           @fetcher = fetcher
         end
 
@@ -29,10 +29,18 @@ module Compote
         end
 
         def execute(args={})
+          body = request args
+          parse_body_xml body
+        end
+
+        def request(args={})
           uri = build args
-          body = @fetcher.fetch uri
-          body = Nokogiri::XML body
-          parse body
+          @fetcher.fetch uri
+        end
+
+        def parse_as_xml(body)
+          body_xml = Nokogiri::XML body
+          parse body_xml
         end
 
         def params(args={})

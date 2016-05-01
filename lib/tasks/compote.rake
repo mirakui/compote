@@ -1,6 +1,7 @@
 require 'compote/crawler'
 require 'compote/importer'
 require 'compote/exporter'
+require 'compote/pipeline/daily_update'
 require 'dotenv/tasks'
 
 namespace :compote do
@@ -14,6 +15,11 @@ namespace :compote do
     task isbns: :environment do
       crawler = Compote::Crawler.new
       crawler.crawl_isbns
+    end
+
+    task test: :environment do
+      pipe = Compote::Pipeline::DailyUpdate.new
+      pipe.start month_ago: 0
     end
   end
 

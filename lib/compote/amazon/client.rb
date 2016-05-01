@@ -10,8 +10,7 @@ module Compote
 
       def lookup_items_by_isbn(isbn)
         strategy = Strategy::LookupItemsByIsbn.new fetcher: @fetcher
-        binding.pry
-        strategy.execute isbn: isbn
+        strategy.request isbn: isbn
       end
     end
   end
