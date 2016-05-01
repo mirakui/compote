@@ -1,7 +1,6 @@
 require 'compote/pipeline/task/base'
 require 'compote/fetcher'
 require 'compote/parser'
-require 'compote/amazon/client'
 
 module Compote
   module Pipeline
