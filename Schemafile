@@ -1,6 +1,6 @@
 # vim:ft=ruby
 
-table_opts = { force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4' }
+table_opts = { force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC' }
 
 create_table :sources, table_opts do |t|
   t.string    :isbn, null: false, limit: 32
