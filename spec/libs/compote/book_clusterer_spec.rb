@@ -10,6 +10,11 @@ RSpec.describe Compote::BookClusterer, type: :model do
         series: 'いなり、こんこん、恋いろは。',
         label: '角川コミックス・エース'
       },
+      '桜Trick 1巻 桜Trick (まんがタイムKRコミックス)' => {
+        title: '桜Trick 1巻',
+        series: '桜Trick',
+        label: 'まんがタイムKRコミックス',
+      },
     }.each do |title, expected|
       describe title do
         it do
