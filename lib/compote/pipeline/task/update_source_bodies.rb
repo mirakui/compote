@@ -1,6 +1,5 @@
 require 'compote/pipeline/task/base'
 require 'compote/fetcher'
-require 'compote/parser'
 
 module Compote
   module Pipeline

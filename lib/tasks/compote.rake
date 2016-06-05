@@ -10,13 +10,4 @@ namespace :compote do
       pipe.start month_ago: args[:month_ago].to_i
     end
   end
-
-  namespace :books do
-    desc 'export book titles as TSV'
-    task export: :environment do
-      raise 'please specify output filename as ENV["FILE"]' unless ENV['FILE']
-      exporter = Compote::Exporter.new ENV['FILE']
-      exporter.start
-    end
-  end
 end
