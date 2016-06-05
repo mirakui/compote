@@ -1,3 +1,5 @@
+require 'compote/book_clusterer'
+
 def dump_clusters_to_md(clusters, dev)
   clusters.sort_by do |key, books|
     key
@@ -13,6 +15,8 @@ def dump_clusters_to_md(clusters, dev)
   end
 end
 
+bc = Compote::BookClusterer.new
+
 book_clusters = Hash.new {|h,k| h[k] = [] }
 
 Book.where(is_adult:false, is_ebook:true).
@@ -20,8 +24,7 @@ Book.where(is_adult:false, is_ebook:true).
   pluck('publishers.name as publisher_name', :authors, :published_on, :released_on, :title, :asin).
 each do |b|
   publisher_name, authors, published_on, released_on, title, asin = b
-  authors = authors.gsub("\t", '-')
-  cluster_key = [publisher_name, authors].join('/')
+  cluster_key = bc.generate_key publisher_name: publisher_name, authors: authors, title: title
   book_clusters[cluster_key] << b
 end
 
