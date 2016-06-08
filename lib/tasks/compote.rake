@@ -1,4 +1,3 @@
-require 'compote/exporter'
 require 'compote/pipeline/daily_update'
 require 'dotenv/tasks'
 
